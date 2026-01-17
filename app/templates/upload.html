@@ -1,0 +1,262 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white p-10 md:p-16 rounded-2xl shadow-xl relative overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-48 h-48 bg-brand-gold/5 blur-3xl rounded-full"></div>
+        <div class="absolute inset-0 opacity-[0.02] pointer-events-none"
+            style="background-image: url('https://www.transparenttextures.com/patterns/notebook.png');"></div>
+
+        <div class="text-center mb-16 relative z-10">
+            <h1 class="text-5xl font-black text-brand-forest tracking-tighter font-poppins">Sell a Book</h1>
+            <p class="text-brand-forest/40 font-medium mt-3 uppercase tracking-[0.12em] text-[10px]">List your book for
+                sale or donation</p>
+        </div>
+
+        <form id="uploadForm" class="space-y-12 relative z-10">
+            <!-- Hidden Location Fields -->
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+
+            <!-- Mode Selection -->
+            <div class="grid grid-cols-3 gap-6">
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="mode" value="sell" class="peer sr-only" checked
+                        onchange="togglePrice(true)">
+                    <div
+                        class="p-8 bg-gradient-to-br from-brand-parchment to-white rounded-2xl text-center group-hover:from-white group-hover:to-brand-parchment/20 transition-all duration-300 peer-checked:from-brand-gold/10 peer-checked:to-white peer-checked:ring-2 peer-checked:ring-brand-gold/20 peer-checked:shadow-lg">
+                        <span class="text-3xl mb-3 block">📜</span>
+                        <span
+                            class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-forest/60 group-hover:text-brand-forest transition-colors">For
+                            Sale</span>
+                    </div>
+                </label>
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="mode" value="donate" class="peer sr-only" onchange="togglePrice(false)">
+                    <div
+                        class="p-8 bg-gradient-to-br from-brand-parchment to-white rounded-2xl text-center group-hover:from-white group-hover:to-brand-parchment/20 transition-all duration-300 peer-checked:from-brand-forest/10 peer-checked:to-white peer-checked:ring-2 peer-checked:ring-brand-forest/20 peer-checked:shadow-lg">
+                        <span class="text-3xl mb-3 block">🕯️</span>
+                        <span
+                            class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-forest/60 group-hover:text-brand-forest transition-colors">Donate</span>
+                    </div>
+                </label>
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="mode" value="buy" class="peer sr-only" onchange="togglePrice(false)">
+                    <div
+                        class="p-8 bg-gradient-to-br from-brand-parchment to-white rounded-2xl text-center group-hover:from-white group-hover:to-brand-parchment/20 transition-all duration-300 peer-checked:from-brand-rose/10 peer-checked:to-white peer-checked:ring-2 peer-checked:ring-brand-rose/20 peer-checked:shadow-lg">
+                        <span class="text-3xl mb-3 block">🖋️</span>
+                        <span
+                            class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-forest/60 group-hover:text-brand-forest transition-colors">Request</span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="space-y-10">
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-brand-forest uppercase tracking-[0.12em] mb-4 ml-1 label-required">Book
+                            Title</label>
+                        <input type="text" name="title" required
+                            class="block w-full px-6 py-4 bg-gradient-to-br from-brand-parchment/50 to-white rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-gold/30 focus:outline-none transition-all font-bold text-brand-forest placeholder-brand-forest/30 shadow-inner"
+                            placeholder="Book Title">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-brand-forest uppercase tracking-[0.12em] mb-4 ml-1 label-required">Author</label>
+                        <input type="text" name="author" required
+                            class="block w-full px-6 py-4 bg-gradient-to-br from-brand-parchment/50 to-white rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-gold/30 focus:outline-none transition-all font-bold text-brand-forest placeholder-brand-forest/30 shadow-inner"
+                            placeholder="John Doe">
+                    </div>
+                    <div id="priceField">
+                        <label
+                            class="block text-[10px] font-black text-brand-forest uppercase tracking-[0.12em] mb-4 ml-1">Price
+                            Rs.<span id="priceRequired" class="text-brand-rose font-black ml-1 hidden">*</span></label>
+                        <div class="relative">
+                            <span class="absolute left-6 top-1/2 -translate-y-1/2 font-black text-brand-gold">Rs.</span>
+                            <input type="number" name="price" id="priceInput" step="0.01" value="0"
+                                class="block w-full pl-12 pr-6 py-4 bg-gradient-to-br from-brand-parchment/50 to-white rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-gold/30 focus:outline-none transition-all font-black text-brand-forest shadow-inner">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-10">
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-brand-forest uppercase tracking-[0.12em] mb-4 ml-1 label-required">Contact
+                            Number</label>
+                        <input type="text" name="contact_number" required
+                            class="block w-full px-6 py-4 bg-gradient-to-br from-brand-parchment/50 to-white rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-gold/30 focus:outline-none transition-all font-bold text-brand-forest placeholder-brand-forest/30 shadow-inner"
+                            placeholder="+977 9800000000">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-brand-forest uppercase tracking-[0.12em] mb-4 ml-1 label-required">Book
+                            Location</label>
+                        <button type="button" onclick="getLocation()" id="locationBtn"
+                            class="flex items-center justify-center w-full px-6 py-4 bg-gradient-to-br from-brand-parchment to-white text-brand-forest rounded-xl font-black text-[11px] uppercase tracking-[0.2em] hover:from-white hover:to-brand-parchment transition-all shadow-inner hover:shadow-md hover:ring-1 hover:ring-brand-forest/10">
+                            <span class="mr-3">📍</span> <span id="locationBtnText">Pin Location</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label
+                    class="block text-[10px] font-black text-brand-forest uppercase tracking-[0.12em] mb-4 ml-1">Collector's
+                    Summary</label>
+                <textarea name="description" rows="4"
+                    class="block w-full px-6 py-4 bg-gradient-to-br from-brand-parchment/50 to-white rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-gold/30 focus:outline-none transition-all font-bold text-brand-forest placeholder-brand-forest/30 shadow-inner"
+                    placeholder="Describe the condition of the book"></textarea>
+            </div>
+
+            <div>
+                <label
+                    class="block text-[10px] font-black text-brand-forest uppercase tracking-[0.12em] mb-4 ml-1 label-required">Visual
+                    Evidence</label>
+                <div class="mt-1 flex justify-center px-8 py-16 bg-gradient-to-br from-brand-parchment/30 to-white rounded-2xl hover:from-brand-parchment/50 hover:to-white transition-all group cursor-pointer relative shadow-inner hover:shadow-md hover:ring-1 hover:ring-brand-gold/20"
+                    onclick="document.getElementById('fileInput').click()">
+                    <div class="space-y-4 text-center">
+                        <div
+                            class="w-20 h-20 bg-white border border-brand-gold/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform text-3xl text-brand-gold">
+                            📷
+                        </div>
+                        <div
+                            class="flex text-xs text-brand-forest/50 font-bold items-center justify-center uppercase tracking-[0.12em]">
+                            <span class="text-brand-gold underline mr-2" id="fileLabel">Upload a Photograph</span>
+                            <span>for the Records</span>
+                        </div>
+                        <p class="text-[10px] text-brand-forest/30 uppercase tracking-[0.12em] font-black">Formats: JPG,
+                            PNG up to 10MB</p>
+                    </div>
+                    <input id="fileInput" name="file" type="file" class="sr-only" accept="image/*" required
+                        onchange="updateFileLabel(this)">
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" disabled
+                class="w-full flex justify-center py-6 px-10 bg-gradient-to-r from-brand-gold to-brand-gold/90 text-white rounded-xl shadow-xl text-xl font-black leading-none hover:opacity-95 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none hover:shadow-2xl transition-all duration-300">
+                Inscribe into Library
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        const form = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const latitude = document.getElementById('latitude').value;
+        const longitude = document.getElementById('longitude').value;
+        const fileInput = document.getElementById('fileInput');
+
+        const title = form.querySelector('[name="title"]').value.trim();
+        const author = form.querySelector('[name="author"]').value.trim();
+        const contact = form.querySelector('[name="contact_number"]').value.trim();
+
+        const isLocationPinned = latitude && longitude;
+        const isFileUploaded = fileInput.files && fileInput.files.length > 0;
+
+        const isFormValid = title && author && contact && isLocationPinned && isFileUploaded;
+
+        submitBtn.disabled = !isFormValid;
+    }
+
+    document.getElementById('uploadForm').addEventListener('input', validateForm);
+    document.getElementById('uploadForm').addEventListener('change', validateForm);
+
+    function togglePrice(show) {
+        const field = document.getElementById('priceField');
+        const input = document.getElementById('priceInput');
+        const priceRequired = document.getElementById('priceRequired');
+        if (show) {
+            field.classList.remove('opacity-30', 'pointer-events-none');
+            input.disabled = false;
+            input.required = true;
+            if (priceRequired) priceRequired.classList.remove('hidden');
+        } else {
+            field.classList.add('opacity-30', 'pointer-events-none');
+            input.value = 0;
+            input.disabled = true;
+            input.required = false;
+            if (priceRequired) priceRequired.classList.add('hidden');
+        }
+        validateForm();
+    }
+
+    function updateFileLabel(input) {
+        const label = document.getElementById('fileLabel');
+        if (input.files && input.files[0]) {
+            label.textContent = input.files[0].name;
+            label.classList.remove('underline');
+        }
+        validateForm();
+    }
+
+    function getLocation() {
+        const btnText = document.getElementById('locationBtnText');
+        if (!navigator.geolocation) {
+            alert("This device's atlas is out of date. Geolocation not supported.");
+            return;
+        }
+
+        btnText.textContent = "Consulting the Atlas...";
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+                btnText.textContent = "Coordinates Pinned ✓";
+                validateForm();
+            },
+            (error) => {
+                alert("The library was unable to verify your location. Please check your permissions.");
+                btnText.textContent = "Location Denied";
+                validateForm();
+            }
+        );
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            alert("Your identification has expired. Please sign in again.");
+            window.location.href = '/login';
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Writing to Archives...";
+
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('/books/', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("The volume has been successfully recorded in the library archives!");
+                window.location.href = '/';
+            } else {
+                const error = await response.json();
+                alert(`Inscription failed: ${error.detail}`);
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert("An archival error occurred. Please verify your connection to the library.");
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
+
+    validateForm();
+</script>
+{% endblock %}

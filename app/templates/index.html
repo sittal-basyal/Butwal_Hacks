@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="relative">
+    <!-- Hero Section -->
+    <section
+        class="relative pt-24 pb-32 lg:pt-40 lg:pb-52 overflow-hidden border-b border-brand-forest/5 bg-brand-forest text-brand-parchment">
+        <div class="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style="background-image: url('https://www.transparenttextures.com/patterns/notebook.png');"></div>
+
+        <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-brand-gold/10 rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-brand-rose/5 rounded-full blur-[120px]"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="hero-backdrop"></div>
+
+            <div
+                class="mb-12 inline-flex items-center space-x-4 px-6 py-2 bg-brand-parchment/5 rounded-sm border border-brand-parchment/10">
+                <span class="w-1.5 h-1.5 bg-brand-gold rounded-full animate-pulse"></span>
+                <span class="text-[10px] font-black uppercase tracking-[0.12em] text-brand-gold">The Home for
+                    reusable books</span>
+            </div>
+
+            <h1 class="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-tight mb-12 hero-title">
+                <span class="hero-subtitle font-poppins">Buy &amp; Sell</span><br />
+                <span class="hero-highlight font-poppins">Used Books</span>
+            </h1>
+
+            <p class="text-lg sm:text-xl md:text-2xl text-brand-parchment/70 font-medium leading-relaxed mb-16 max-w-2xl mx-auto">
+                "A local marketplace where books find new homes, and readers connect through shared stories."
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-8">
+                <a href="/browse"
+                    class="w-full sm:w-auto px-16 py-6 bg-brand-gold text-brand-parchment text-sm font-black rounded-lg shadow-2xl hover:bg-brand-parchment hover:text-brand-forest transition-all transform hover:-translate-y-1 active:scale-95 uppercase tracking-[0.12em] font-poppins">
+                    Browse Books
+                </a>
+                <a href="/upload"
+                    class="w-full sm:w-auto px-16 py-6 bg-brand-forest border-2 border-brand-gold/30 text-brand-gold text-sm font-black rounded-lg hover:bg-brand-gold/10 transition-all transform hover:-translate-y-1 active:scale-95 uppercase tracking-[0.12em]">
+                    Sell Book
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-40 bg-brand-parchment relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-24">
+                <div class="group">
+                    <div
+                        class="w-20 h-20 bg-brand-forest text-brand-parchment flex items-center justify-center text-4xl mb-10 shadow-xl rounded-full transition-transform group-hover:scale-110 group-hover:bg-brand-gold">
+                        📍</div>
+                    <h3 class="text-3xl font-black text-brand-forest mb-6 tracking-tight font-poppins">Local Pickup
+                    </h3>
+                    <p class="text-brand-forest/50 font-medium leading-relaxed text-sm">Meet sellers nearby and pick up
+                        books in person. No shipping fees, just local connections.</p>
+                </div>
+
+                <!-- AI  -->
+                <div class="group">
+                    <div
+                        class="w-20 h-20 bg-brand-forest text-brand-parchment flex items-center justify-center text-4xl mb-10 shadow-xl rounded-full transition-transform group-hover:scale-110 group-hover:bg-brand-rose">
+                        ✨</div>
+                    <h3 class="text-3xl font-black text-brand-forest mb-6 tracking-tight font-poppins">AI Summary</h3>
+                    <p class="text-brand-forest/50 font-medium leading-relaxed text-sm">Get quick AI-generated summaries
+                        of books before you buy. Know what you're getting instantly.</p>
+                </div>
+
+                <!-- Simple Inscription -->
+                <div class="group">
+                    <div
+                        class="w-20 h-20 bg-brand-forest text-brand-parchment flex items-center justify-center text-4xl mb-10 shadow-xl rounded-full transition-transform group-hover:scale-110 group-hover:bg-brand-gold">
+                        🖋️</div>
+                    <h3 class="text-3xl font-black text-brand-forest mb-6 tracking-tight font-poppins">Easy Listing
+                    </h3>
+                    <p class="text-brand-forest/50 font-medium leading-relaxed text-sm">List your books in minutes. Just
+                        snap a photo, add details, and you're done.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps -->
+    <section class="py-40 bg-brand-forest/5 border-t border-brand-forest/5 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center mb-24">
+                <h2 class="text-5xl font-black text-brand-forest tracking-tighter font-poppins">The Archival Process
+                </h2>
+                <div class="w-24 h-1 bg-brand-gold mx-auto mt-8 opacity-20"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
+                <div class="relative z-10">
+                    <div class="text-6xl font-black text-brand-forest/5 serif absolute -top-8 -left-4">01</div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.12em] text-brand-gold mb-6">Discovery</h4>
+                    <p class="text-brand-forest/60 font-bold text-sm leading-relaxed">Browse the archives
+                        to find hidden gems and lost classics near you.</p>
+                </div>
+                <div class="relative z-10">
+                    <div class="text-6xl font-black text-brand-forest/5 serif absolute -top-8 -left-4">02</div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.12em] text-brand-gold mb-6">Dialogue</h4>
+                    <p class="text-brand-forest/60 font-bold text-sm leading-relaxed">Identify the keeper
+                        and establish a direct connection to arrange the scrolls.</p>
+                </div>
+                <div class="relative z-10">
+                    <div class="text-6xl font-black text-brand-forest/5 serif absolute -top-8 -left-4">03</div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.12em] text-brand-gold mb-6">Epilogue</h4>
+                    <p class="text-brand-forest/60 font-bold text-sm leading-relaxed">Consult the AI
+                        Curator for the essence of the work and similar recommendations.</p>
+                </div>
+                <div class="relative z-10">
+                    <div class="text-6xl font-black text-brand-forest/5 serif absolute -top-8 -left-4">04</div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.12em] text-brand-gold mb-6">Inheritance</h4>
+                    <p class="text-brand-forest/60 font-bold text-sm leading-relaxed">Add the volume to
+                        your personal archive and continue the story.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

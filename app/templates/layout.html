@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Thrift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            forest: '#053F3E',   
+                            parchment: '#FAF9F7', 
+                            gold: '#D4A017',      
+                            rose: '#C94F6D',     
+                            accent: '#0EA5A7'    
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-forest: #053F3E;
+            --brand-parchment: #FAF9F7;
+            --brand-gold: #D4A017;
+            --brand-rose: #C94F6D;
+            --brand-accent: #0EA5A7;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--brand-parchment);
+            color: var(--brand-forest);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Playfair Display', serif;
+            color: var(--brand-forest);
+        }
+
+        ::selection {
+            background-color: var(--brand-gold);
+            color: white;
+        }
+
+        /* Subtle Texture Overlay for the whole app */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url('https://www.transparenttextures.com/patterns/notebook.png');
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        * {
+            transition: all 0.18s ease-in-out;
+        }
+
+        /* Small utility helpers */
+        .btn-primary {
+            background-color: var(--brand-accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .font-poppins {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Label required helper */
+        .label-required::after {
+            content: ' *';
+            color: var(--brand-rose);
+            font-weight: 800;
+            margin-left: 0.12rem;
+        }
+
+        /* Navigation link helper to reduce excessive letter spacing */
+        .nav-link {
+            letter-spacing: 0.06em;
+        }
+
+        /* Hero-specific styles */
+        .hero-title {
+            text-shadow: 0 10px 30px rgba(5,63,62,0.45);
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            color: var(--brand-parchment);
+            -webkit-text-stroke: 0.6px rgba(5,63,62,0.28);
+            text-shadow: 0 14px 40px rgba(5,63,62,0.55);
+            display: inline-block;
+            padding: 0 0.15rem;
+            border-radius: 0.25rem;
+        }
+
+        .hero-highlight {
+            display: inline-block;
+            background: none;
+            color: var(--brand-gold);
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            font-weight: 800;
+            text-decoration: none;
+            border-bottom: 2px solid rgba(212,160,23,0.08);
+            text-shadow: 0 6px 20px rgba(5,63,62,0.12);
+            transition: color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+        }
+
+        .hero-highlight:hover {
+            /* Hover disabled: keep visual state consistent */
+            transform: none;
+            color: var(--brand-gold);
+            border-bottom-color: rgba(212,160,23,0.08);
+        }
+
+        .hero-backdrop {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(5,63,62,0.45) 0%, rgba(5,63,62,0.15) 20%, rgba(5,63,62,0.0) 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        a {
+            color: var(--brand-forest);
+        }
+
+        a:hover {
+            color: var(--brand-gold);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen text-brand-forest antialiased">
+    <nav class="bg-brand-parchment/95 backdrop-blur-md sticky top-0 z-[100] border-b border-brand-forest/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center group">
+                        <div
+                            class="w-12 h-12 bg-brand-forest rounded-full flex items-center justify-center shadow-lg group-hover:bg-brand-gold transition-all transform hover:-translate-y-0.5 border-2 border-brand-parchment/8">
+                            <span class="text-2xl text-brand-parchment">📖</span>
+                        </div>
+                        <div class="ml-3">
+                            <span
+                                class="text-2xl font-black tracking-tighter text-brand-forest block leading-none">BookThrift</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-10">
+                    <a href="/browse"
+                        class="text-[12px] font-black text-brand-forest/70 hover:text-brand-gold uppercase nav-link transition-colors">Browse</a>
+                    <a href="/upload"
+                        class="text-[12px] font-black text-brand-forest/70 hover:text-brand-gold uppercase nav-link transition-colors">Sell
+                        Book</a>
+
+                    <div id="auth-links" class="flex items-center space-x-8 border-l border-brand-forest/10 pl-10">
+                        <a href="/login"
+                            class="text-[12px] font-black text-brand-forest/70 hover:text-brand-gold uppercase nav-link transition-colors">Login</a>
+                        <a href="/register"
+                            class="px-8 py-3 btn-primary rounded-sm text-[12px] font-black uppercase tracking-[0.12em] hover:opacity-95 shadow-xl active:scale-95 transition-all">Register</a>
+                    </div>
+
+                    <div id="user-menu"
+                        class="hidden flex items-center space-x-8 border-l border-brand-forest/10 pl-10">
+                        <a href="/me"
+                            class="text-[12px] font-black text-brand-forest/70 hover:text-brand-gold uppercase nav-link transition-colors">Me</a>
+                        <a href="/my-books"
+                            class="text-[12px] font-black text-brand-forest/70 hover:text-brand-gold uppercase nav-link transition-colors">Library</a>
+                        <button onclick="logout()"
+                            class="p-2 border border-brand-forest/10 hover:border-brand-gold text-brand-forest/40 hover:text-brand-gold rounded-sm transition-colors">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow py-16">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-brand-forest py-24 relative overflow-hidden text-brand-parchment">
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none"
+            style="background-image: url('https://www.transparenttextures.com/patterns/notebook.png');"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+                <div>
+                    <div class="flex items-center mb-8">
+                        <span class="text-3xl">📖</span>
+                        <span class="ml-4 text-3xl font-black tracking-tighter text-brand-parchment">BookThrift</span>
+                    </div>
+                    <p class="text-brand-parchment/50 font-medium leading-relaxed max-w-sm text-base">
+                        "A sanctuary for local readers. Buy, sell, and donate volumes with botanical elegance."
+                    </p>
+                </div>
+
+                <div class="flex md:justify-end space-x-16">
+                    <div class="flex flex-col space-y-4">
+                        <h4 class="text-[10px] font-black text-brand-gold uppercase tracking-[0.12em] mb-4 font-poppins">Archives</h4>
+                        <a href="/browse"
+                            class="text-xs font-bold text-brand-parchment/40 hover:text-brand-rose transition-colors uppercase tracking-[0.12em] font-poppins">Browse
+                            books</a>
+                        <a href="/upload"
+                            class="text-xs font-bold text-brand-parchment/40 hover:text-brand-rose transition-colors uppercase tracking-[0.12em] font-poppins">Sell
+                            Book</a>
+                    </div>
+                    <div class="flex flex-col space-y-4">
+                        <h4 class="text-[10px] font-black text-brand-gold uppercase tracking-[0.12em] mb-4 font-poppins">Identity</h4>
+                        <a href="/login"
+                            class="text-xs font-bold text-brand-parchment/40 hover:text-brand-rose transition-colors uppercase tracking-[0.12em] font-poppins">Login</a>
+                        <a href="/register"
+                            class="text-xs font-bold text-brand-parchment/40 hover:text-brand-rose transition-colors uppercase tracking-[0.12em] font-poppins">Register</a>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="mt-20 pt-10 border-t border-brand-parchment/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-[9px] font-black text-brand-parchment/20 uppercase tracking-[0.12em]">
+                    &copy; 2026 Book Thrift. All rights reserved.
+                </p>
+                <div class="flex gap-8">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            document.getElementById('auth-links').classList.add('hidden');
+            document.getElementById('user-menu').classList.remove('hidden');
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+            } catch (e) {
+                console.error("Invalid token");
+            }
+        } else {
+            document.getElementById('auth-links').classList.remove('hidden');
+            document.getElementById('user-menu').classList.add('hidden');
+        }
+
+        function logout() {
+            localStorage.removeItem('access_token');
+            window.location.href = '/';
+        }
+
+        const originalFetch = window.fetch;
+        window.fetch = function () {
+            let args = Array.from(arguments);
+            let url = args[0];
+            let options = args[1] || {};
+
+            if (!url.includes('/login') && !url.includes('/register')) {
+                const token = localStorage.getItem('access_token');
+                if (token) {
+                    options.headers = options.headers || {};
+                    if (options.headers instanceof Headers) {
+                        options.headers.set('Authorization', `Bearer ${token}`);
+                    } else {
+                        options.headers['Authorization'] = `Bearer ${token}`;
+                    }
+                }
+            }
+            args[1] = options;
+            return originalFetch.apply(this, args);
+        };
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

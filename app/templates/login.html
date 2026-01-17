@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="max-w-md mx-auto px-4 mt-8">
+  <div class="bg-white p-10 rounded-lg shadow-xl border border-gray-200 relative">
+    <div class="absolute inset-0 opacity-5 pointer-events-none"
+         style="background-image: url('https://www.transparenttextures.com/patterns/notebook.png');">
+    </div>
+
+    <div class="text-center mb-10 relative z-10">
+      <div class="w-16 h-16 mx-auto mb-5 bg-emerald-900 rounded-full flex items-center justify-center border-2 border-yellow-600/30 shadow">
+        <span class="text-4xl text-yellow-500 font-bold">B</span>
+      </div>
+      <h1 class="text-4xl font-extrabold text-emerald-950">Welcome Back</h1>
+      <p class="mt-2 text-xs text-emerald-700/60 uppercase tracking-wider font-semibold">
+        Sign in to your bookshelf
+      </p>
+    </div>
+
+    <form id="loginForm" class="space-y-8 relative z-10">
+      <div>
+        <label class="block text-xs font-bold text-emerald-900 uppercase tracking-wide mb-2">
+          Email
+        </label>
+        <input 
+          type="email" 
+          id="email" 
+          name="username" 
+          required 
+          autocomplete="email"
+          placeholder="you@example.com"
+          class="w-full px-5 py-3 bg-gray-50 border border-gray-300 rounded-md 
+                 focus:border-yellow-600 focus:bg-white focus:outline-none transition
+                 font-medium text-emerald-950 placeholder:text-gray-400"
+        >
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-emerald-900 uppercase tracking-wide mb-2">
+          Password
+        </label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          required 
+          autocomplete="current-password"
+          placeholder="••••••••"
+          class="w-full px-5 py-3 bg-gray-50 border border-gray-300 rounded-md 
+                 focus:border-yellow-600 focus:bg-white focus:outline-none transition
+                 font-medium text-emerald-950 placeholder:text-gray-400"
+        >
+      </div>
+
+      <div id="error-msg" 
+           class="hidden text-red-600 text-xs font-bold text-center mt-2">
+        Wrong email or password
+      </div>
+
+      <button 
+        type="submit"
+        class="w-full py-4 bg-emerald-900 text-white font-bold rounded-md 
+               shadow-lg hover:bg-emerald-800 active:bg-emerald-950 
+               transition-all duration-200">
+        Sign In
+      </button>
+    </form>
+
+    <p class="mt-8 text-center text-sm text-gray-500">
+      New around here? 
+      <a href="/register" class="text-yellow-600 hover:text-yellow-700 underline">
+        Create account
+      </a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const form = document.getElementById('loginForm');
+const errorDiv = document.getElementById('error-msg');
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  errorDiv.classList.add('hidden');
+  
+  const formData = new FormData(form);
+  
+  try {
+    const res = await fetch('/auth/login', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem('access_token', data.access_token);
+      window.location.href = '/';
+      return;
+    }
+
+    const err = await res.json();
+    showError(err.detail || 'Something went wrong');
+    
+  } catch (error) {
+    console.log(error);
+    showError("Can't connect — check your internet?");
+  }
+});
+
+function showError(msg) {
+  errorDiv.textContent = msg;
+  errorDiv.classList.remove('hidden');
+  
+  form.classList.add('shake');
+  setTimeout(() => form.classList.remove('shake'), 600);
+}
+</script>
+
+<style>
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70% { transform: translateX(-6px); }
+    20%, 40%, 60%, 80% { transform: translateX(6px); }
+  }
+  .shake { animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both; }
+</style>
+{% endblock %}

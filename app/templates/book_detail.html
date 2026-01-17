@@ -1,0 +1,327 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+<div class="max-w-7xl mx-auto px-4">
+    <nav class="flex mb-16 text-[10px] font-black uppercase tracking-[0.12em] text-brand-forest/20">
+        <a href="/" class="hover:text-brand-gold transition-colors">Home</a>
+        <span class="mx-3">/</span>
+        <a href="/browse" class="hover:text-brand-gold transition-colors">Browse</a>
+        <span class="mx-3">/</span>
+        <span class="text-brand-forest/40 uppercase tracking-[0.12em]">{{ book.title }}</span>
+    </nav>
+
+    <div class="bg-white rounded-sm shadow-2xl border border-brand-forest/5 overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+            <!-- Image Section -->
+            <div class="p-10 lg:p-20 bg-brand-forest/5">
+                <div
+                    class="aspect-[3/4] rounded-sm overflow-hidden shadow-[0_30px_60px_-15px_rgba(17,47,32,0.3)] border-[12px] border-white group relative">
+                    {% if book.image_filename %}
+                    <img src="/static/uploads/{{ book.image_filename }}" alt="{{ book.title }}"
+                        class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-brand-forest/5">
+                        <span class="text-9xl">📖</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="absolute inset-0 pointer-events-none opacity-10 mix-blend-multiply"
+                        style="background-image: url('https://www.transparenttextures.com/patterns/notebook.png');">
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-10 lg:p-24 flex flex-col justify-center relative">
+                <div class="absolute inset-0 opacity-[0.02] pointer-events-none"
+                    style="background-image: url('https://www.transparenttextures.com/patterns/notebook.png');"></div>
+
+                <div class="mb-14 relative z-10">
+                    <div class="flex items-center gap-4 mb-8">
+                        <span class="px-5 py-2 rounded-sm text-[9px] font-black uppercase tracking-[0.12em] shadow-sm
+                            {% if book.mode|string == 'sell' %}bg-brand-gold text-brand-parchment
+                            {% elif book.mode|string == 'donate' %}bg-brand-forest text-brand-parchment
+                            {% else %}bg-brand-rose text-brand-parchment{% endif %}">
+                            {% if book.mode|string == 'sell' %}For Sale
+                            {% elif book.mode|string == 'donate' %}Free
+                            {% else %}Requested{% endif %}
+                        </span>
+                        {% if book.price > 0 %}
+                        <span class="text-3xl font-black text-brand-forest tabular-nums">Rs.{{
+                            "%.2f"|format(book.price) }}</span>
+                        {% else %}
+                        <span class="text-3xl font-black text-brand-gold">Free</span>
+                        {% endif %}
+                    </div>
+
+                    <h1 class="text-5xl md:text-6xl font-black text-brand-forest tracking-tight leading-tight mb-6">
+                        {{ book.title }}
+                    </h1>
+                    <h2 class="text-sm font-bold text-brand-forest/30 uppercase tracking-wide">by <span
+                            class="text-brand-gold">{{ book.author
+                            }}</span></h2>
+                </div>
+
+                <div
+                    class="prose prose-sm max-w-none text-brand-forest/60 mb-14 leading-relaxed text-base relative z-10">
+                    <p>
+                        {{ book.description or "No description provided for this book yet." }}
+                    </p>
+                </div>
+
+                <div id="ai-summary-container"
+                    class="{% if not book.ai_summary %}hidden{% endif %} bg-brand-forest text-brand-parchment p-12 rounded-sm border-l-8 border-brand-gold relative group mb-14 shadow-xl z-10">
+                    <div class="absolute top-8 right-10 text-4xl opacity-10">✨</div>
+                    <h3 class="text-xs font-black text-brand-gold uppercase tracking-wider mb-6">
+                        AI Summary
+                    </h3>
+                    <p id="ai-summary-text" class="text-brand-parchment/70 text-base leading-relaxed">
+                        "{{ book.ai_summary or "Generating summary..." }}"
+                    </p>
+                </div>
+
+                <div id="login-notice"
+                    class="bg-brand-parchment p-12 rounded-sm border-2 border-brand-forest/5 shadow-inner text-center z-10">
+                    <div
+                        class="w-16 h-16 bg-brand-forest text-brand-gold rounded-full flex items-center justify-center text-2xl shadow-xl mx-auto mb-8">
+                        🔒</div>
+                    <h3 class="text-2xl font-black text-brand-forest mb-4">Login Required</h3>
+                    <p class="text-brand-forest/40 mb-10 text-sm font-medium max-w-xs mx-auto leading-relaxed">
+                        Please sign in to see seller contact details and location.</p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-6">
+                        <a href="/login"
+                            class="px-12 py-5 rounded-sm text-xs font-black uppercase tracking-wider text-brand-parchment bg-brand-forest hover:bg-brand-gold shadow-2xl transition-all active:scale-95">
+                            Login
+                        </a>
+                        <a href="/register"
+                            class="px-12 py-5 rounded-sm text-xs font-black uppercase tracking-wider text-brand-forest border-2 border-brand-forest/10 hover:bg-brand-forest hover:text-brand-parchment transition-all active:scale-95">
+                            Register
+                        </a>
+                    </div>
+                </div>
+
+                <div id="contact-info" class="hidden space-y-12 z-10">
+                    <div
+                        class="p-12 bg-brand-forest rounded-sm text-brand-parchment shadow-2xl relative overflow-hidden group">
+                        <div class="absolute inset-0 opacity-[0.05] pointer-events-none"
+                            style="background-image: url('https://www.transparenttextures.com/patterns/notebook.png');">
+                        </div>
+
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-10 relative z-10">
+                            <div>
+                                <h4 class="text-xs font-black text-brand-gold uppercase tracking-wider mb-4">
+                                    {% if book.mode|string == 'buy' %}Requester{% else %}Seller{% endif %}
+                                </h4>
+                                <p class="text-4xl font-black tracking-tighter mb-4 text-brand-parchment">
+                                    {% if book.seller %}
+                                    {{ book.seller.full_name or book.seller.email.split('@')[0] }}
+                                    {% else %}
+                                    Anonymous User
+                                    {% endif %}
+                                </p>
+                                <p class="text-brand-parchment/60 text-xs font-bold uppercase tracking-wide">
+                                    {% if book.mode|string == 'buy' %}Looking for this book{% else %}Book Owner{% endif
+                                    %}
+                                </p>
+                            </div>
+                            <div class="flex flex-col gap-4">
+                                <a href="tel:{{ book.contact_number }}"
+                                    class="px-10 py-5 bg-brand-gold text-brand-parchment rounded-sm text-xs font-black uppercase tracking-wider hover:bg-brand-parchment hover:text-brand-forest transition-all flex items-center justify-center shadow-xl">
+                                    Contact {% if book.mode|string == 'buy' %}Buyer{% else %}Seller{% endif %}
+                                </a>
+                                <p class="text-center text-xs font-black text-white uppercase tracking-[0.12em]">
+                                    {{ book.contact_number }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-black text-brand-forest">Location</h3>
+                            <p id="distance-info" class="text-xs font-bold text-brand-gold uppercase tracking-wide"></p>
+                        </div>
+                        <div id="map" class="h-96 rounded-sm shadow-inner border-2 border-brand-forest/10 relative z-0">
+                        </div>
+                        <div class="flex gap-4">
+                            <a id="directions-btn" target="_blank"
+                                class="flex-1 px-8 py-5 bg-white border-2 border-brand-forest/10 rounded-sm text-xs font-black uppercase tracking-wider text-brand-forest hover:border-brand-gold hover:text-brand-gold transition-all text-center">
+                                Get Directions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="recommendations-section" class="mt-32 mb-20">
+        <div class="text-center mb-20">
+            <h2 class="text-4xl font-black text-brand-forest tracking-tight">Similar Books</h2>
+            <div class="w-32 h-1 bg-brand-gold mx-auto mt-8 opacity-20"></div>
+            <p class="mt-6 text-xs font-bold text-brand-forest/30 uppercase tracking-wide">Other books you might
+                like</p>
+        </div>
+        <div id="similar-books" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+            {% for i in range(4) %}
+            <div class="animate-pulse bg-white border border-brand-forest/5 p-8 rounded-sm h-64 shadow-sm"></div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="book-metadata" data-id="{{ book.id }}" data-lat="{{ book.latitude if book.latitude is not none else '' }}"
+    data-lon="{{ book.longitude if book.longitude is not none else '' }}">
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    const metaEl = document.getElementById('book-metadata');
+    const bookData = {
+        id: metaEl.dataset.id,
+        latitude: metaEl.dataset.lat ? parseFloat(metaEl.dataset.lat) : null,
+        longitude: metaEl.dataset.lon ? parseFloat(metaEl.dataset.lon) : null
+    };
+
+    let map = null;
+
+    async function checkAuthAndInit() {
+        try {
+            const response = await fetch('/auth/me');
+            if (response.ok) {
+                const user = await response.json();
+                document.getElementById('login-notice').classList.add('hidden');
+                document.getElementById('contact-info').classList.remove('hidden');
+
+                if (bookData.latitude && bookData.longitude) {
+                    initMap();
+                    setupDirections(bookData.latitude, bookData.longitude);
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition((pos) => {
+                            const userLat = pos.coords.latitude;
+                            const userLon = pos.coords.longitude;
+                            const dist = calculateDistance(userLat, userLon, bookData.latitude, bookData.longitude);
+                            document.getElementById('distance-info').textContent = `${dist.toFixed(1)} km away`;
+                        });
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Auth check failed:', error);
+        }
+    }
+
+    function initMap() {
+        if (!bookData.latitude || !bookData.longitude) return;
+
+        map = L.map('map', {
+            scrollWheelZoom: false,
+            zoomControl: false
+        }).setView([bookData.latitude, bookData.longitude], 13);
+
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '©OpenStreetMap, ©CartoDB'
+        }).addTo(map);
+
+        const bookIcon = L.divIcon({
+            html: `<div class="w-10 h-10 bg-brand-forest rounded-full border-4 border-brand-gold shadow-2xl flex items-center justify-center text-xl">📖</div>`,
+            className: 'custom-div-icon',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20]
+        });
+
+        L.marker([bookData.latitude, bookData.longitude], { icon: bookIcon }).addTo(map);
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    function setupDirections(lat, lon) {
+        const btn = document.getElementById('directions-btn');
+        if (btn) btn.href = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+    }
+
+    async function loadSimilarBooks() {
+        try {
+            const resp = await fetch(`/books/similar/${bookData.id}`);
+            if (!resp.ok) throw new Error('Failed to load similar books');
+            const data = await resp.json();
+            const container = document.getElementById('similar-books');
+            if (container) {
+                container.innerHTML = '';
+                if (data.length === 0) {
+                    container.innerHTML = '<p class="col-span-full text-center text-brand-forest/20">No similar books found.</p>';
+                } else {
+                    data.forEach(item => {
+                        const card = `
+                            <a href="/view-book/${item.id}" class="group bg-white rounded-sm overflow-hidden border border-brand-forest/5 shadow-sm hover:shadow-xl transition-all p-4">
+                                <div class="aspect-[4/5] bg-brand-forest/5 rounded-sm overflow-hidden mb-6">
+                                    <img src="${item.image_filename ? '/static/uploads/' + item.image_filename : 'https://via.placeholder.com/300x400?text=No+Image'}" 
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700">
+                                </div>
+                                <h4 class="font-black text-brand-forest truncate group-hover:text-brand-gold transition-colors">${item.title}</h4>
+                                <p class="text-xs font-medium text-brand-forest/30 uppercase tracking-wide mt-2">${item.author}</p>
+                            </a>
+                        `;
+                        container.insertAdjacentHTML('beforeend', card);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Similar books loading failed:', error);
+        }
+    }
+
+    async function loadAISummary() {
+        const summaryText = document.getElementById('ai-summary-text');
+        const summaryContainer = document.getElementById('ai-summary-container');
+        if (!summaryText || !summaryContainer) return;
+
+        if (summaryText.textContent.trim().length > 20 && !summaryText.textContent.includes("Generating")) {
+            return;
+        }
+
+        try {
+            summaryContainer.classList.remove('hidden');
+            const resp = await fetch(`/ai/summary/${bookData.id}`);
+            if (resp.ok) {
+                const data = await resp.json();
+                summaryText.textContent = data.summary;
+            } else {
+                summaryContainer.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('AI summary fetch failed:', error);
+            summaryContainer.classList.add('hidden');
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        checkAuthAndInit();
+        loadSimilarBooks();
+        loadAISummary();
+    });
+</script>
+
+<style>
+    .custom-div-icon {
+        background: transparent;
+        border: none;
+    }
+</style>
+{% endblock %}
